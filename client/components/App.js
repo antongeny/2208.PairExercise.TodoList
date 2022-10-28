@@ -1,36 +1,38 @@
-import React, { useEffect } from 'react';
-import { Route, Routes, Link } from 'react-router-dom';
-import Todos from './Todos';
-import CreateTodo from './CreateTodo';
-import { useDispatch, useSelector } from 'react-redux';
-import { setTodos } from '../store/todosSlice';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { Route, Routes, Link } from "react-router-dom";
+import Todos from "./Todos";
+import CreateTodo from "./CreateTodo";
+import { useDispatch, useSelector } from "react-redux";
+import { setTodos } from "../store/todosSlice";
+import axios from "axios";
 
 const App = () => {
-  const todos = useSelector(state => state.todos.todos);
-  const dispatch = useDispatch();
+	const todos = useSelector((state) => state.todos.todos);
+	const dispatch = useDispatch();
 
-  const fetchTodos = async () => {
-    const { data: todos } = await axios.get('/api/todos');
-    dispatch(setTodos(todos))
-  }
+	const fetchTodos = async () => {
+		const { data: todos } = await axios.get("/api/todos");
+		dispatch(setTodos(todos));
+	};
 
-  useEffect(() => {
-    fetchTodos();
-  }, [])
+	useEffect(() => {
+		fetchTodos();
+	}, []);
 
-  return (
-    <div id='main' >
-      <h1>
-        <Link to='/'>Todos ({todos.length})</Link>
-      </h1>
-      <Link to='/todos/create'>Create A New Todo</Link>
-      <Routes>
-        <Route path='/todos/create' element={<CreateTodo />} />
-        <Route path='/' element={<Todos />} />
-      </Routes>
-    </div>
-  );
-}
+	return (
+		<div id="main">
+			<h1>
+				<Link to="/">Todos ({todos.length})</Link>
+			</h1>
+			{/* <Link to="/todos/delete"></Link> */}
+			<Link to="/todos/create">Create A New Todo</Link>
+			<Routes>
+				<Route path="/todos/create" element={<CreateTodo />} />
+				<Route path="/" element={<Todos />} />
+				<Route path="/todos/:todosId" element={<EditToDo />} />
+			</Routes>
+		</div>
+	);
+};
 
 export default App;

@@ -1,38 +1,47 @@
-import React, { useState } from 'react';
-import { createTodo } from '../store/todosSlice';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState } from "react";
+import { createTodo } from "../store/todosSlice";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CreateTodo = () => {
-  const [taskName, setTaskName] = useState("");
-  const [assignee, setAssignee] = useState("");
+	const [taskName, setTaskName] = useState("");
+	const [assignee, setAssignee] = useState("");
 
-  const dispatch = useDispatch("");
-  const navigate = useNavigate();
+	const dispatch = useDispatch("");
+	const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const { data: created } = await axios.post('/api/todos', {
-      taskName,
-      assignee
-    });
-    dispatch(createTodo(created))
-    navigate('/');
-  }
+	const handleSubmit = async (event) => {
+		event.preventDefault();
+		const { data: created } = await axios.post("/api/todos", {
+			taskName,
+			assignee,
+		});
+		dispatch(createTodo(created));
+		navigate("/");
+	};
 
-  return (
-    <form id='todo-form' onSubmit={handleSubmit}>
-      <label htmlFor='taskName'>Task Name:</label>
-      <input name='taskName' value={taskName} />
+	const handleTaskChange = (event) => {
+		console.log("handleChange evt.target.value -->", event.target.value);
+		setTaskName(event.target.value);
+	};
 
-      <label htmlFor='assignee'>Assign To:</label>
-      <input name='assignee' value={assignee} />
+	const handleAssigneeChange = (event) => {
+		setAssignee(event.target.value);
+	};
 
-      <button type='submit'>Submit</button>
-      <Link to='/'>Cancel</Link>
-    </form>
-  );
+	return (
+		<form id="todo-form" onSubmit={handleSubmit}>
+			<label htmlFor="taskName">Task Name:</label>
+			<input name="taskName" onChange={handleTaskChange} value={taskName} />
+
+			<label htmlFor="assignee">Assign To:</label>
+			<input name="assignee" onChange={handleAssigneeChange} value={assignee} />
+
+			<button type="submit">Submit</button>
+			<Link to="/">Cancel</Link>
+		</form>
+	);
 };
 
 export default CreateTodo;
